@@ -1,0 +1,116 @@
+/*
+
+Crontol Automatico Maquina de alimentacion automatica de masctocas
+
+Maquina para alimentar mascotas de forma automatica.
+La maquina funciona de la siguiente manera:
+
+ * Cuando no hay comida suficiente el motor se enciende entregando mas comida.
+ * Cuando tiene comida suficiente el motor se apaga para que no rebalse el recipiente.
+
+ * Cuando no hay agua suficiente se enciende la valvula solenoide entregando agua.
+ * Cuando tiene agua suficiente se apaga la valvula solenoide para que no rebalse el recipiente.
+
+ * Para medir el nivel de agua se ocupa un sensor ultrasonico.
+ * Para medir el peso de la comida se ocupa una sensor de peso, en este caso es reemplazado por un potenciometro.
+
+Datos a tener en cuenta:
+    
+  - el led amarillo hace referencia a una senal digital para girar un motor  de 5v y dar comida.
+  - el led rojo hace referencia a una senal digital para prender o apagar un solenoide de 5v para dar agua.
+
+
+Author: Sebastian Lopez 
+*/
+
+
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(1, 2, 4, 5, 6, 7); //pines de la interfaz LCD 
+
+// contanstes para el sistema de Agua
+const int trigPin=9;
+const int echoPin=10;
+const int ledDiodo=13;
+long distance,duration;
+float volumen;
+float distancia;
+int volumenA;
+
+// constanstes para el sistema de Peso
+long poten,resultPot;
+const int sensorPin = A0;
+const int ledDiodoPeso=12;
+
+
+
+void setup() {
+lcd.begin(16,2);
+lcd.setCursor(0,0); //curso columna 0 fila 0 
+// config pines sistema de Agua
+pinMode(trigPin,OUTPUT);
+pinMode(echoPin,INPUT);
+pinMode(ledDiodo,OUTPUT);
+// config pines de sistema Peso 
+pinMode(ledDiodoPeso,OUTPUT);
+pinMode(A0,INPUT);
+}
+
+
+void loop() {
+lcd.clear(); // cada vez que empiece el bucle limpia la pantalla
+sensorAgua(); // funcion que controla el nivel del agua
+sensorPeso(); // funcion que controla el peso de la comida
+delay(1000);
+}
+
+// Funcion control de nivel de Agua
+void sensorAgua(){
+digitalWrite(trigPin,HIGH); // enviar senal del tripin
+delayMicroseconds(20);
+digitalWrite(trigPin,LOW); // apaga senal del tripin
+delayMicroseconds(20);
+duration = pulseIn(echoPin, HIGH); //recibe senal reflejad
+distance= duration*0.034/2; // funcion calcula la distancia
+
+volumen = volumenAgua(distance);
+volumenA = (int) volumen;
+controlSolenoide(volumenA);
+lcd.setCursor(0,0); // curso columna 0 fila 0 
+lcd.print(volumenA);
+lcd.print(" ml");
+}
+
+// Funcion para controlar el solenoide con respecto al nivel del agua
+void controlSolenoide(int a){
+   if(a < 100){
+   digitalWrite(ledDiodo,HIGH); 
+  }
+   if(a > 900){
+   digitalWrite(ledDiodo,LOW);
+  } 
+}
+// Funcion para convertir los datos a ml, tener en cuenta que el recipiente tiene que ser cilindrico.
+long volumenAgua(long distancia){
+long volumen;
+volumen = (200-distancia)*3.1415*4.5;
+return volumen/2;
+}
+
+// Funcion control de Peso
+void sensorPeso(){
+poten = analogRead(sensorPin); 
+resultPot = poten/2;
+  if(resultPot < 100){
+    digitalWrite(ledDiodoPeso,LOW); 
+  }
+  if(resultPot > 500){
+    digitalWrite(ledDiodoPeso,HIGH); 
+  }
+lcd.setCursor(0,1);  // curso columna 0 fila 1
+lcd.print(resultPot);
+lcd.print(" g");
+}
+
+
+
+/* Fin del Programa */
