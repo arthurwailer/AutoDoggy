@@ -1,2 +1,2 @@
 # AutoDoggy
-Maquina para alimentar y dar de beber a un animal de forma automatica.
+Machine to feed and water an animal automatically. With ultrasonic sensor and weight sensor, plus selenoid.
