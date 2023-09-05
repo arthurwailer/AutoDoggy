@@ -1,26 +1,28 @@
 /*
 
-Crontol Automatico Maquina de alimentacion automatica de masctocas
+Automatic Control Automatic Pet Feeder Machine
 
-Maquina para alimentar mascotas de forma automatica.
-La maquina funciona de la siguiente manera:
-
- * Cuando no hay comida suficiente el motor se enciende entregando mas comida.
- * Cuando tiene comida suficiente el motor se apaga para que no rebalse el recipiente.
-
- * Cuando no hay agua suficiente se enciende la valvula solenoide entregando agua.
- * Cuando tiene agua suficiente se apaga la valvula solenoide para que no rebalse el recipiente.
-
- * Para medir el nivel de agua se ocupa un sensor ultrasonico.
- * Para medir el peso de la comida se ocupa una sensor de peso, en este caso es reemplazado por un potenciometro.
-
-Datos a tener en cuenta:
-    
-  - el led amarillo hace referencia a una senal digital para girar un motor  de 5v y dar comida.
-  - el led rojo hace referencia a una senal digital para prender o apagar un solenoide de 5v para dar agua.
+Machine for automatically feeding pets.
+The machine operates as follows:
 
 
-Author: Sebastian Lopez 
+* When there is not enough food, the motor turns on to dispense more food.
+
+* When there is enough food, the motor turns off to prevent the container from overflowing.
+
+* When there is not enough water, the solenoid valve turns on to dispense water.
+
+* When there is enough water, the solenoid valve turns off to prevent the container from overflowing.
+
+* An ultrasonic sensor is used to measure the water level.
+
+* A weight sensor is used to measure the food weight, in this case, it is replaced by a potentiometer.
+
+* Points to consider:
+
+The yellow LED refers to a digital signal to activate a 5V motor to dispense food.
+The red LED refers to a digital signal to turn on or off a 5V solenoid to dispense water.
+Author: Sebastian Lopez
 */
 
 
